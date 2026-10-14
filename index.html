@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A premium medical patient portal and doctor appointment scheduling system.">
+  <title>Smart Healthcare & Doctor Appointment Portal</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- AngularJS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body ng-app="healthApp" ng-controller="healthController">
+
+  <!-- ==========================================
+       MOBILE HEADER & BACKDROP
+       ========================================== -->
+  <div class="mobile-header">
+    <div class="brand-logo" style="width: 32px; height: 32px;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+      </svg>
+    </div>
+    <div class="brand-name" style="font-size: 1.1rem; flex: 1; margin-left: 8px;">SmartCare</div>
+    <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle Navigation">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+  <!-- ==========================================
+       SIDEBAR NAVIGATION
+       ========================================== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+        </svg>
+      </div>
+      <span class="brand-name">SmartCare Portal</span>
+      <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close Navigation">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <nav>
+      <ul class="nav-list">
+        <li class="nav-item active"><a href="#home" onclick="closeSidebar()"><svg viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>Home</a></li>
+        <li class="nav-item"><a href="#dashboard" onclick="closeSidebar()"><svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="9"></rect>
+              <rect x="14" y="3" width="7" height="5"></rect>
+              <rect x="14" y="12" width="7" height="9"></rect>
+              <rect x="3" y="16" width="7" height="5"></rect>
+            </svg>Dashboard</a></li>
+        <li class="nav-item"><a href="#registration" onclick="closeSidebar()"><svg viewBox="0 0 24 24">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>Registration</a></li>
+        <li class="nav-item"><a href="#departments" onclick="closeSidebar()"><svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>Departments</a></li>
+        <li class="nav-item"><a href="#doctors" onclick="closeSidebar()"><svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>Specialist Doctors</a></li>
+        <li class="nav-item"><a href="#appointment" onclick="closeSidebar()"><svg viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>Book Appointment</a></li>
+        <li class="nav-item"><a href="#health-news" onclick="closeSidebar()"><svg viewBox="0 0 24 24">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
+              <path d="M7 8h6M7 12h8M7 16h4"></path>
+            </svg>Daily Health News</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- ==========================================
+       MAIN CONTENT CONTAINER
+       ========================================== -->
+  <div class="main-container">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-title" data-i18n="Smart Healthcare Dashboard">Smart Healthcare Dashboard</div>
+      <div class="topbar-actions">
+        <div class="topbar-status">
+          <span class="status-dot" id="db-status-dot"></span>
+          <span id="db-status-text" data-i18n="System Status: Online & Healthy">System Status: Online & Healthy</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <main class="content-area">
+
+      <!-- ==========================================
+           TOP HERO SHOWCASE & SLIDING WINDOW SECTION
+           ========================================== -->
+      <section class="portal-main-hero" id="home">
+        <!-- Background Ambient Glows -->
+        <div class="hero-glow-orb hero-glow-1"></div>
+        <div class="hero-glow-orb hero-glow-2"></div>
+
+        <div class="hero-content-wrapper">
+          <!-- Left Column: Story & Information -->
+          <div class="hero-info-column">
+            <div class="hero-badge-pill">
+              <span class="hero-pulse-dot"></span>
+              <span class="hero-badge-title">SmartCare Healthcare Ecosystem</span>
+              <span class="hero-badge-divider">&bull;</span>
+              <span class="hero-badge-sub">Intelligent Patient Care</span>
+            </div>
+
+            <h1 class="hero-main-heading">
+              Next-Generation Healthcare <br>
+              <span class="hero-gradient-text">Connected, Intelligent & Instant</span>
+            </h1>
+
+            <p class="hero-lead-text">
+              Welcome to <strong>SmartCare Health Portal</strong> — your unified digital hospital companion. 
+              We bridge the gap between patients and world-class medicine with 
+              <strong>11 specialized clinical departments</strong>, verified specialist physicians, 
+              real-time consultation slot booking with anti-overbooking capacity guards, 
+              24/7 multilingual <strong>Gemini AI symptom triage</strong> in 7 regional languages, 
+              and an emergency community blood donor network.
+            </p>
+
+            <!-- Feature Pills Matrix -->
+            <div class="hero-features-matrix">
+              <div class="hero-feat-item" onclick="smoothSlideTo('#departments')">
+                <span class="feat-icon">🏥</span>
+                <div>
+                  <strong>11 Clinical Departments</strong>
+                  <span>Cardiology to Dentistry</span>
+                </div>
+              </div>
+              <div class="hero-feat-item" onclick="smoothSlideTo('#doctors')">
+                <span class="feat-icon">👨‍⚕️</span>
+                <div>
+                  <strong>11 Specialist Doctors</strong>
+                  <span>Verified top physicians</span>
+                </div>
+              </div>
+              <div class="hero-feat-item" onclick="smoothSlideTo('#appointment')">
+                <span class="feat-icon">⚡</span>
+                <div>
+                  <strong>Real-Time Appointments</strong>
+                  <span>In-person & online slots</span>
+                </div>
+              </div>
+              <div class="hero-feat-item" onclick="toggleAiChat()">
+                <span class="feat-icon">🤖</span>
+                <div>
+                  <strong>Multilingual Gemini AI</strong>
+                  <span>Voice triage in 7 languages</span>
+                </div>
+              </div>
+              <div class="hero-feat-item" onclick="smoothSlideTo('#registration')">
+                <span class="feat-icon">🩸</span>
+                <div>
+                  <strong>Emergency Blood Network</strong>
+                  <span>Rapid voluntary registry</span>
+                </div>
+              </div>
+              <div class="hero-feat-item" onclick="smoothSlideTo('#health-news')">
+                <span class="feat-icon">📰</span>
+                <div>
+                  <strong>Daily Health News</strong>
+                  <span>Verified medical updates</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Primary CTAs -->
+            <div class="hero-cta-group">
+              <button type="button" class="btn-hero-cta btn-hero-cta-primary" onclick="smoothSlideTo('#dashboard')" aria-label="Slide down to dashboard">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+                <span>Slide Down to Dashboard</span>
+              </button>
+
+              <button type="button" class="btn-hero-cta btn-hero-cta-secondary" onclick="smoothSlideTo('#appointment')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <span>Book Appointment</span>
+              </button>
+
+              <button type="button" class="btn-hero-cta btn-hero-cta-ai" onclick="toggleAiChat()" title="Open AI Health Assistant">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+                  <path d="M4 11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-7z"></path>
+                  <circle cx="9" cy="15" r="1.5" fill="currentColor"></circle>
+                  <circle cx="15" cy="15" r="1.5" fill="currentColor"></circle>
+                </svg>
+                <span>Ask AI Assistant</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Sliding Window Card -->
+          <div class="hero-window-column">
+            <div class="sliding-window-device">
+              <!-- Window Chrome Header -->
+              <div class="window-chrome-bar">
+                <div class="window-traffic-lights">
+                  <span class="w-dot dot-close"></span>
+                  <span class="w-dot dot-min"></span>
+                  <span class="w-dot dot-max"></span>
+                </div>
+                <div class="window-tab-title">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                  </svg>
+                  <span>SmartCare Sliding Window</span>
+                </div>
+                <div class="window-controls">
+                  <button type="button" class="btn-win-nav" onclick="slideWindowPrev()" aria-label="Previous service slide" title="Previous Slide">&uarr;</button>
+                  <button type="button" class="btn-win-nav" onclick="slideWindowNext()" aria-label="Next service slide" title="Next Slide">&darr;</button>
+                </div>
+              </div>
+
+              <!-- Sliding Window Viewport -->
+              <div class="sliding-window-viewport">
+                <!-- Slide 1 -->
+                <div class="sliding-window-item active" data-index="0">
+                  <div class="win-card-header">
+                    <span class="win-card-badge dept-badge">Clinical Departments</span>
+                    <span class="win-card-step">01 / 06</span>
+                  </div>
+                  <h3>🏥 11 Specialized Medical Departments</h3>
+                  <p>Comprehensive clinical disciplines covering Cardiology, Dermatology, Neurology, Orthopedics, Pediatrics, Ophthalmology, ENT, Radiology, Psychiatry, Dentistry and General Medicine with certified medical staff.</p>
+                  <div class="win-card-meta">
+                    <span class="meta-tag">11 Specializations</span>
+                    <span class="meta-tag">Clinical Scope Table</span>
+                  </div>
+                  <button type="button" class="win-card-action-btn" onclick="smoothSlideTo('#departments')">
+                    Explore Departments Table &rarr;
+                  </button>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="sliding-window-item" data-index="1">
+                  <div class="win-card-header">
+                    <span class="win-card-badge doc-badge">Specialist Doctors</span>
+                    <span class="win-card-step">02 / 06</span>
+                  </div>
+                  <h3>👨‍⚕️ Top Certified Specialist Physicians</h3>
+                  <p>Browse our roster of 11 verified doctors with real clinical experience, patient ratings, transparent consultation fees, and one-click direct appointment scheduling.</p>
+                  <div class="win-card-meta">
+                    <span class="meta-tag">11 Physicians</span>
+                    <span class="meta-tag">₹400 - ₹900 Fees</span>
+                    <span class="meta-tag">★ 4.9 Rating</span>
+                  </div>
+                  <button type="button" class="win-card-action-btn" onclick="smoothSlideTo('#doctors')">
+                    Browse Specialist Doctors &rarr;
+                  </button>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="sliding-window-item" data-index="2">
+                  <div class="win-card-header">
+                    <span class="win-card-badge appt-badge">Real-Time Booking</span>
+                    <span class="win-card-step">03 / 06</span>
+                  </div>
+                  <h3>📅 Instant Appointments & Official PDF Receipts</h3>
+                  <p>Pick In-Person or Online consultation modes with automatic anti-overbooking protection (15 bookings cap per slot), prescription file uploads, and downloadable official PDF consultation receipts.</p>
+                  <div class="win-card-meta">
+                    <span class="meta-tag">Anti-Overbooking</span>
+                    <span class="meta-tag">PDF Receipt</span>
+                    <span class="meta-tag">Document Upload</span>
+                  </div>
+                  <button type="button" class="win-card-action-btn" onclick="smoothSlideTo('#appointment')">
+                    Book Consultation Slot &rarr;
+                  </button>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="sliding-window-item" data-index="3">
+                  <div class="win-card-header">
+                    <span class="win-card-badge ai-badge">AI Assistant</span>
+                    <span class="win-card-step">04 / 06</span>
+                  </div>
+                  <h3>🤖 Multilingual Gemini AI Health Triage</h3>
+                  <p>Immediate 24/7 symptom triaging powered by Google Gemini. Supports spoken voice recognition & speech read-aloud in 7 regional Indian languages (English, Telugu, Hindi, Tamil, Kannada, Malayalam, Bengali).</p>
+                  <div class="win-card-meta">
+                    <span class="meta-tag">7 Languages</span>
+                    <span class="meta-tag">Voice Input & Output</span>
+                    <span class="meta-tag">24/7 Active</span>
+                  </div>
+                  <button type="button" class="win-card-action-btn" onclick="toggleAiChat()">
+                    Launch AI Health Chat &rarr;
+                  </button>
+                </div>
+
+                <!-- Slide 5 -->
+                <div class="sliding-window-item" data-index="4">
+                  <div class="win-card-header">
+                    <span class="win-card-badge blood-badge">Emergency Network</span>
+                    <span class="win-card-step">05 / 06</span>
+                  </div>
+                  <h3>🩸 Community Emergency Blood Donor Registry</h3>
+                  <p>Integrated blood donation consent during patient registration enables rapid life-saving donor outreach during hospital emergencies with complete patient privacy controls.</p>
+                  <div class="win-card-meta">
+                    <span class="meta-tag">Voluntary Consent</span>
+                    <span class="meta-tag">Emergency Ready</span>
+                  </div>
+                  <button type="button" class="win-card-action-btn" onclick="smoothSlideTo('#registration')">
+                    Register as Patient & Donor &rarr;
+                  </button>
+                </div>
+
+                <!-- Slide 6 -->
+                <div class="sliding-window-item" data-index="5">
+                  <div class="win-card-header">
+                    <span class="win-card-badge news-badge">Global Health</span>
+                    <span class="win-card-step">06 / 06</span>
+                  </div>
+                  <h3>🌐 Daily Global Health News & Updates</h3>
+                  <p>Real-time verified health bulletins, clinical research updates, and disease prevention insights fetched directly from medical authorities and health journals.</p>
+                  <div class="win-card-meta">
+                    <span class="meta-tag">Verified Sources</span>
+                    <span class="meta-tag">Daily Updates</span>
+                  </div>
+                  <button type="button" class="win-card-action-btn" onclick="smoothSlideTo('#health-news')">
+                    Read Health News &rarr;
+                  </button>
+                </div>
+              </div>
+
+              <!-- Sliding Window Pagination & Status -->
+              <div class="window-footer-bar">
+                <div class="sliding-window-dots">
+                  <button type="button" class="sliding-window-dot active" onclick="setSlidingWindowSlide(0)" aria-label="Slide 1"></button>
+                  <button type="button" class="sliding-window-dot" onclick="setSlidingWindowSlide(1)" aria-label="Slide 2"></button>
+                  <button type="button" class="sliding-window-dot" onclick="setSlidingWindowSlide(2)" aria-label="Slide 3"></button>
+                  <button type="button" class="sliding-window-dot" onclick="setSlidingWindowSlide(3)" aria-label="Slide 4"></button>
+                  <button type="button" class="sliding-window-dot" onclick="setSlidingWindowSlide(4)" aria-label="Slide 5"></button>
+                  <button type="button" class="sliding-window-dot" onclick="setSlidingWindowSlide(5)" aria-label="Slide 6"></button>
+                </div>
+                <div class="window-live-status">
+                  <span class="live-dot"></span>
+                  <span>Auto-Sliding Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Slide-Down Indicator Bar -->
+        <div class="hero-slide-down-bar" onclick="smoothSlideTo('#dashboard')" role="button" tabindex="0" aria-label="Slide down into healthcare dashboard">
+          <div class="slide-down-flex">
+            <span class="slide-down-mouse">
+              <span class="slide-down-wheel"></span>
+            </span>
+            <span class="slide-down-label">SLIDE DOWN TO EXPLORE DASHBOARD & SERVICES</span>
+            <svg class="slide-down-chevron" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- HERO / MAIN DASHBOARD -->
+      <div class="dashboard-hero" id="dashboard">
+        <span class="hero-tag">Welcome Back</span>
+        <h1>Your Health, Our Priority</h1>
+        <p>Manage your health consultations seamlessly. Register details online, find trusted specialist doctors, and
+          book appointments instantly with real-time slot selection.</p>
+      </div>
+
+      <!-- KPI Statistics Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-value">11</span>
+            <span class="kpi-label">Specialist Doctors</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-value">11</span>
+            <span class="kpi-label">Departments Available</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-value">24/7</span>
+            <span class="kpi-label">Online Assistance</span>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
+          <div class="kpi-info">
+            <span class="kpi-value">100%</span>
+            <span class="kpi-label">Instant Confirmation</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           PATIENT REGISTRATION SECTION
+           ========================================== -->
+      <section id="registration">
+        <div class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+            Patient Registration Portal
+          </h2>
+          <p>Please enter your personal and contact details to register on our healthcare network.</p>
+        </div>
+
+        <form onsubmit="return validateRegistration(event)">
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="patientName">Full Name</label>
+              <input type="text" id="patientName" placeholder="Enter your first and last name">
+            </div>
+
+            <div class="form-group">
+              <label for="dob">Date of Birth</label>
+              <input type="date" id="dob">
+            </div>
+
+            <div class="form-group">
+              <label>Gender</label>
+              <div class="radio-group">
+                <div class="radio-card">
+                  <input type="radio" name="gender" id="gender-male" value="Male">
+                  <div class="radio-card-content">Male</div>
+                </div>
+                <div class="radio-card">
+                  <input type="radio" name="gender" id="gender-female" value="Female">
+                  <div class="radio-card-content">Female</div>
+                </div>
+                <div class="radio-card">
+                  <input type="radio" name="gender" id="gender-other" value="Other">
+                  <div class="radio-card-content">Other</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Mobile Number</label>
+              <input type="text" id="phone" placeholder="Enter 10-digit mobile number">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="example@health.com">
+            </div>
+
+            <div class="form-group">
+              <label for="bloodGroup">Blood Group</label>
+              <div class="select-wrapper">
+                <select id="bloodGroup" required>
+                  <option value="">Select Blood Group</option>
+                  <option>A+</option>
+                  <option>A-</option>
+                  <option>B+</option>
+                  <option>B-</option>
+                  <option>AB+</option>
+                  <option>AB-</option>
+                  <option>O+</option>
+                  <option>O-</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="address">Residential Address</label>
+              <textarea id="address" rows="3"
+                placeholder="Enter your complete street name, city, and pincode"></textarea>
+            </div>
+
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="btn btn-secondary" id="btnClearRegistration" onclick="clearRegistrationForm()" data-i18n="Clear Fields">Clear Fields</button>
+            <button type="submit" class="btn btn-primary" id="btnCompleteRegistration" data-i18n="Complete Registration">Complete Registration</button>
+          </div>
+        </form>
+
+        <!-- ==========================================
+             OPTIONAL BLOOD DONATION CONSENT MODAL
+             ========================================== -->
+        <div id="blood-donation-modal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="blood-donation-title">
+          <div class="modal-dialog blood-donation-dialog">
+            <div class="modal-header">
+              <div class="modal-header-icon blood-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                </svg>
+              </div>
+              <div class="modal-header-text">
+                <span class="badge-optional" data-i18n="Blood Donation">Blood Donation</span>
+                <h3 id="blood-donation-title" data-i18n="Blood Donation">Blood Donation</h3>
+              </div>
+              <button type="button" class="modal-close-btn" onclick="closeBloodDonationModal(true)" aria-label="Skip question and proceed">&times;</button>
+            </div>
+
+            <div class="modal-body">
+              <p class="blood-question-text" id="bloodDonationQuestionText" data-i18n="In case of any emergencies, if your blood group is required, are you willing to donate your blood so that we can contact you?">
+                In case of any emergencies, if your blood group is required, are you willing to donate your blood so that we can contact you?
+              </p>
+              
+              <p class="blood-note-text" data-i18n="You may skip this question">
+                You may skip this question. Please select your preference.
+              </p>
+
+              <div class="blood-options-group">
+                <label class="blood-option-card">
+                  <input type="radio" name="bloodConsent" value="yes">
+                  <span class="blood-option-indicator"></span>
+                  <span class="blood-option-label" data-i18n="Yes, I am willing to donate">Yes, I am willing to donate</span>
+                </label>
+
+                <label class="blood-option-card">
+                  <input type="radio" name="bloodConsent" value="no">
+                  <span class="blood-option-indicator"></span>
+                  <span class="blood-option-label" data-i18n="No, I am not willing to donate">No, I am not willing to donate</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" onclick="finalizeRegistration(null)" id="btnSkipBloodConsent" data-i18n="You may skip this question">
+                You may skip this question
+              </button>
+              <button type="button" class="btn btn-primary" onclick="submitConsentFromModal()" id="btnConfirmBloodConsent" data-i18n="Complete Registration">
+                Complete Registration
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           HEALTHCARE DEPARTMENTS SECTION
+           ========================================== -->
+      <section id="departments">
+        <div class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Specialized Medical Departments
+          </h2>
+          <p>Explore our healthcare specializations and duties carried out by our dedicated clinical staff.</p>
+        </div>
+
+        <iframe srcdoc="
+          <!DOCTYPE html>
+          <html lang='en'>
+          <head>
+            <meta charset='UTF-8'>
+            <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap' rel='stylesheet'>
+            <style>
+              body {
+                font-family: 'Inter', sans-serif;
+                margin: 0;
+                padding: 16px;
+                background-color: transparent;
+                color: #334155;
+              }
+              table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+              }
+              th {
+                background-color: #0d9488;
+                color: white;
+                padding: 14px 16px;
+                font-weight: 600;
+                text-align: left;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+              }
+              td {
+                padding: 14px 16px;
+                border-bottom: 1px solid #e2e8f0;
+                color: #334155;
+                font-size: 0.875rem;
+              }
+              tr:last-child td {
+                border-bottom: none;
+              }
+              tr:nth-child(even) {
+                background-color: #f8fafc;
+              }
+              tr:hover {
+                background-color: #f1f5f9;
+                transition: background-color 0.2s ease;
+              }
+              .badge {
+                display: inline-block;
+                padding: 4px 10px;
+                border-radius: 9999px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                background-color: #f0fdfa;
+                color: #0d9488;
+                border: 1px solid #ccfbf1;
+              }
+              .center {
+                text-align: center;
+              }
+              @media (max-width: 600px) {
+                body { padding: 8px 4px; }
+                table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+                th, td { padding: 10px 12px; font-size: 0.8rem; }
+                .badge { font-size: 0.7rem; padding: 3px 8px; }
+              }
+            </style>
+          </head>
+          <body>
+            <table>
+              <thead>
+                <tr>
+                  <th class='center' style='width: 8%;'>S.No</th>
+                  <th style='width: 25%;'>Department</th>
+                  <th style='width: 25%;'>Specialization</th>
+                  <th>Clinical Duties</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>1</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Cardiology</td>
+                  <td><span class='badge'>Cardiologist</span></td>
+                  <td>Diagnoses and treats heart and blood vessel diseases.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>2</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Dermatology</td>
+                  <td><span class='badge'>Dermatologist</span></td>
+                  <td>Diagnoses and treats skin, hair, and nail problems.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>3</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Neurology</td>
+                  <td><span class='badge'>Neurologist</span></td>
+                  <td>Diagnoses and treats disorders of the brain and nervous system.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>4</td>
+                  <td style='font-weight: 600; color: #0f172a;'>General Medicine</td>
+                  <td><span class='badge'>General Physician</span></td>
+                  <td>Provides diagnosis and treatment for common and general health conditions.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>5</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Orthopedics</td>
+                  <td><span class='badge'>Orthopedic Specialist</span></td>
+                  <td>Treats problems related to bones, joints, muscles, and ligaments.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>6</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Pediatrics</td>
+                  <td><span class='badge'>Pediatrician</span></td>
+                  <td>Provides medical care and treatment for infants, children, and teenagers.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>7</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Ophthalmology</td>
+                  <td><span class='badge'>Ophthalmologist</span></td>
+                  <td>Diagnoses and treats eye diseases and vision problems.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>8</td>
+                  <td style='font-weight: 600; color: #0f172a;'>ENT</td>
+                  <td><span class='badge'>ENT Specialist</span></td>
+                  <td>Diagnoses and treats problems of the ear, nose, and throat.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>9</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Radiology</td>
+                  <td><span class='badge'>Radiologist</span></td>
+                  <td>Diagnoses and treats diseases using medical imaging technologies like X-rays and CT scans.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>10</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Psychiatry</td>
+                  <td><span class='badge'>Psychiatrist</span></td>
+                  <td>Diagnoses and treats mental, emotional, and behavioral disorders.</td>
+                </tr>
+                <tr>
+                  <td class='center' style='font-weight: 600;'>11</td>
+                  <td style='font-weight: 600; color: #0f172a;'>Dentistry</td>
+                  <td><span class='badge'>Dentist</span></td>
+                  <td>Diagnoses and treats teeth, gums, and other oral health problems.</td>
+                </tr>
+              </tbody>
+            </table>
+          </body>
+          </html>
+        "></iframe>
+      </section>
+
+      <!-- ==========================================
+           DOCTORS SECTION WITH FILTER
+           ========================================== -->
+      <section id="doctors">
+        <div class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Our Specialist Doctors
+          </h2>
+          <p>Search for certified, top-rated physicians and book slots directly based on clinical specializations.</p>
+        </div>
+
+        <!-- Filter controls -->
+        <div class="doctors-filter-bar">
+          <div class="filter-search-wrapper">
+            <span class="filter-search-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </span>
+            <input type="text" ng-model="searchDocName" placeholder="Search doctor by name...">
+          </div>
+
+          <div class="filter-select-wrapper select-wrapper">
+            <select ng-model="filterDocDept">
+              <option value="">All Departments</option>
+              <option>Cardiology</option>
+              <option>Dermatology</option>
+              <option>Neurology</option>
+              <option>General Medicine</option>
+              <option>Orthopedics</option>
+              <option>Pediatrics</option>
+              <option>Ophthalmology</option>
+              <option>ENT</option>
+              <option>Radiology</option>
+              <option>Psychiatry</option>
+              <option>Dentistry</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Doctors Grid -->
+        <div class="doctors-grid">
+          <div class="doctor-card" ng-repeat="doc in doctors | filter:{name: searchDocName, dept: filterDocDept}">
+            <div class="doctor-badge-container">
+              <span class="exp-badge">{{doc.experience}}</span>
+              <span class="rating-badge">
+                <svg viewBox="0 0 24 24">
+                  <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                  </polygon>
+                </svg>
+                4.9
+              </span>
+            </div>
+
+            <div class="doctor-avatar">
+              <img ng-src="{{doc.image}}" alt="{{doc.name}}">
+            </div>
+
+            <h3>{{doc.name}}</h3>
+            <span class="doctor-spec">{{doc.specialization}}</span>
+
+            <div class="doctor-details-box">
+              <span class="doctor-fee">Fee: <strong>₹{{doc.fee}}</strong></span>
+            </div>
+
+            <button class="btn btn-primary btn-card-action" ng-click="selectDoctor(doc)">
+              Book Appointment
+            </button>
+          </div>
+
+          <!-- Empty State -->
+          <div class="doctors-empty" ng-if="(doctors | filter:{name: searchDocName, dept: filterDocDept}).length === 0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <p style="font-weight: 600; color: var(--text-title); margin-bottom: 4px;">No doctors found</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Try adjusting your search filters.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           APPOINTMENT BOOKING SECTION
+           ========================================== -->
+      <section id="appointment">
+        <div class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Book Appointment Slot
+          </h2>
+          <p>Select specialized departments, choose your prefered doctor, and pick an available date and time slot.</p>
+        </div>
+
+        <form id="appointmentForm" onreset="clearAppointmentDOM()" ng-submit="bookAppointment()" ng-show="!appointmentBooked">
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label for="apptPatientName">Patient Name</label>
+              <input type="text" id="apptPatientName" ng-model="appointment.patientName"
+                placeholder="Enter patient name" required>
+            </div>
+
+            <div class="form-group">
+              <label for="apptDept">Select Department</label>
+              <div class="select-wrapper">
+                <select id="apptDept" ng-model="appointment.department" ng-change="onDepartmentChange()" required>
+                  <option value="">Select Department</option>
+                  <option>Cardiology</option>
+                  <option>Dermatology</option>
+                  <option>Neurology</option>
+                  <option>General Medicine</option>
+                  <option>Orthopedics</option>
+                  <option>Pediatrics</option>
+                  <option>Ophthalmology</option>
+                  <option>ENT</option>
+                  <option>Radiology</option>
+                  <option>Psychiatry</option>
+                  <option>Dentistry</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="apptDoc">Select Doctor</label>
+              <div class="select-wrapper">
+                <!-- Inline dynamic filtering: if a department is selected, filter doctors automatically. Otherwise show all -->
+                <select id="apptDoc" ng-model="appointment.doctor" ng-change="onDoctorChange()" required>
+                  <option value="">Select Doctor</option>
+                  <option
+                    ng-repeat="doc in doctors | filter:(docFilterDept ? {dept: docFilterDept} : '')"
+                    ng-value="doc.name + ' - ' + doc.specialization">
+                    {{doc.name}} - {{doc.specialization}}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="apptDate">Appointment Date</label>
+              <input type="date" id="apptDate" ng-model="appointment.date" ng-change="checkSlotAvailability()" required>
+            </div>
+
+            <div class="form-group">
+              <label for="apptTime" data-i18n="Preferred Time">Preferred Time</label>
+              <div class="select-wrapper">
+                <select id="apptTime" ng-model="appointment.time" required>
+                  <option value="" data-i18n="Select Time Slot">Select Time Slot</option>
+                  <option ng-repeat="slot in availableTimeSlots" ng-value="slot">
+                    {{slot}}
+                  </option>
+                </select>
+              </div>
+              <small class="slot-cap-note" ng-if="availableTimeSlots.length === 0" style="color: #ef4444; font-size: 0.8rem; display: block; margin-top: 4px;" data-i18n="No available time slots">
+                No available time slots
+              </small>
+              <small class="slot-cap-note" ng-if="hasFullSlots && availableTimeSlots.length > 0" style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-top: 4px;" data-i18n="Some time slots are unavailable because they have reached maximum capacity (15 bookings).">
+                Some time slots are unavailable because they have reached maximum capacity (15 bookings).
+              </small>
+            </div>
+
+            <div class="form-group">
+              <label data-i18n="Consultation Mode">Consultation Mode</label>
+              <div class="radio-group">
+                <div class="radio-card">
+                  <input type="radio" ng-model="appointment.type" name="apptType" id="mode-in-person" value="In-Person" ng-change="checkSlotAvailability()" required>
+                  <div class="radio-card-content" data-i18n="In-Person Visit">In-Person Visit</div>
+                </div>
+                <div class="radio-card">
+                  <input type="radio" ng-model="appointment.type" name="apptType" id="mode-online" value="Online" ng-change="checkSlotAvailability()" required>
+                  <div class="radio-card-content" data-i18n="Online Consultation">Online Consultation</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="apptReason">Reason for Visit</label>
+              <textarea id="apptReason" ng-model="appointment.reason" rows="3"
+                placeholder="Describe symptoms or reasons for scheduling this appointment" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="apptCondition">Existing Medical Conditions (Optional)</label>
+              <textarea id="apptCondition" ng-model="appointment.condition" rows="3"
+                placeholder="List chronic illnesses, allergies, or past diagnosis if any"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="apptMeds">Current Medications (Optional)</label>
+              <textarea id="apptMeds" ng-model="appointment.medicines" rows="3"
+                placeholder="List existing medications and dosage information"></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Upload Prescription or Medical Records (Optional)</label>
+              <div class="file-upload-wrapper" id="fileUploadWrapper">
+                <input type="file" id="apptPrescriptionFile" accept=".pdf,.jpg,.jpeg,.png" onchange="handleAppointmentFileUpload(event)">
+                <div class="file-upload-icon" id="fileUploadIcon">
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                  </svg>
+                </div>
+                <div class="file-upload-text" id="fileUploadText">
+                  <span><strong>Click to upload</strong> or drag and drop prescription file</span>
+                  <div style="font-size: 0.75rem; margin-top: 4px;">PDF, PNG, JPG or JPEG (Max 10MB)</div>
+                </div>
+              </div>
+
+              <!-- Uploaded File Display Card -->
+              <div id="uploaded-file-card" class="uploaded-file-card" style="display: none;">
+                <div class="uploaded-file-left">
+                  <div class="uploaded-file-badge" id="uploadedFileBadge">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                    <span id="uploadedFileExtBadge">PDF</span>
+                  </div>
+                  <div class="uploaded-file-details">
+                    <span class="uploaded-file-name" id="uploadedFileName">document.pdf</span>
+                    <span class="uploaded-file-sub" id="uploadedFileSub">Attached for consultation</span>
+                  </div>
+                </div>
+                <div class="uploaded-file-actions">
+                  <button type="button" class="btn-file-action btn-file-preview" id="btnPreviewUploadedFile" onclick="previewUploadedFile()" title="Preview uploaded file">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Preview
+                  </button>
+                  <button type="button" class="btn-file-action btn-file-remove" onclick="removeUploadedFile()" title="Remove file" aria-label="Remove uploaded file">
+                    &times; Remove
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="button-group">
+            <button type="button" class="btn btn-secondary" id="btnClearAppointment" ng-click="clearAppointmentForm()" onclick="clearAppointmentDOM()" data-i18n="Clear Fields">Clear Fields</button>
+            <button type="submit" class="btn btn-primary">Book Consultation Slot</button>
+          </div>
+        </form>
+
+        <!-- Dynamic Official Appointment Receipt (Excludes Conditions/Meds & Dedicated Print Layout) -->
+        <div id="appointment-receipt" class="confirmation-card" ng-show="appointmentBooked">
+          <div class="confirmation-header">
+            <div class="confirmation-header-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+            <div class="confirmation-header-text">
+              <div class="receipt-hospital-badge">SmartCare Multi-Speciality Hospital</div>
+              <h3>Official Consultation Receipt</h3>
+              <p>Booking ID: {{appointment.bookingId}}</p>
+            </div>
+          </div>
+
+          <div class="receipt-details">
+            <div class="receipt-item">
+              <span class="receipt-label">Booking Reference</span>
+              <span class="receipt-val font-bold" style="color: var(--primary);">{{appointment.bookingId}}</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-label">Patient Name</span>
+              <span class="receipt-val">{{appointment.patientName}}</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-label">Specialist Doctor</span>
+              <span class="receipt-val">{{appointment.doctor}}</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-label">Department</span>
+              <span class="receipt-val">{{appointment.department}}</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-label">Appointment Date</span>
+              <span class="receipt-val">{{appointment.date | date:'EEEE, dd-MM-yyyy'}}</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-label">Appointment Time</span>
+              <span class="receipt-val">{{appointment.time}}</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-label">Consultation Mode</span>
+              <span class="receipt-val">{{appointment.type}}</span>
+            </div>
+            <div class="receipt-item">
+              <span class="receipt-label">Booking Status</span>
+              <span class="receipt-val"><span class="badge" style="background-color: #dcfce7; color: #15803d; font-weight: 600;">Confirmed</span></span>
+            </div>
+            <div class="receipt-item" ng-if="appointment.uploadedFileName" style="border-top: 1px dashed var(--border); padding-top: 8px;">
+              <span class="receipt-label">Attached Document</span>
+              <span class="receipt-val" style="color: var(--primary); font-weight: 600;">📄 {{appointment.uploadedFileName}} ({{appointment.uploadedFileSize}})</span>
+            </div>
+            <div class="receipt-item full-width" style="margin-top: 6px; padding-top: 10px; border-top: 1px dashed var(--border);">
+              <span class="receipt-label">Confirmation Note</span>
+              <span class="receipt-val" style="font-size: 0.85rem; color: var(--text-muted);">
+                Your consultation has been confirmed. Please arrive at the clinic 15 minutes prior to your scheduled slot.
+              </span>
+            </div>
+          </div>
+
+          <div class="confirmation-actions no-print">
+            <button type="button" class="btn btn-secondary no-print" id="btnDownloadReceipt" onclick="downloadReceiptPDF()">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Download PDF Receipt
+            </button>
+            <button type="button" class="btn btn-primary no-print" ng-click="resetBookingForm()">
+              Book Another Appointment
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           DAILY HEALTH NEWS SECTION (REPLACED HEALTH ORGANISATIONS)
+           ========================================== -->
+      <section id="health-news">
+        <div class="section-header">
+          <h2>
+            <svg viewBox="0 0 24 24">
+              <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"></path>
+              <path d="M7 8h6M7 12h8M7 16h4"></path>
+            </svg>
+            Daily Health News
+          </h2>
+          <p>Global health updates, verified medical discoveries, and wellness insights from around the world.</p>
+        </div>
+
+        <div id="health-news-container">
+          <div id="health-news-loading" class="news-loading-state" style="display: none;">
+            <div class="news-spinner"></div>
+            <p>Loading latest global health news...</p>
+          </div>
+          <div id="health-news-error" class="news-error-banner" style="display: none;">
+            <span id="health-news-error-text" data-i18n="Unable to load the latest health news right now. Please try again later.">⚠️ Unable to load the latest health news right now. Please try again later.</span>
+            <button class="btn-news-retry" onclick="loadHealthNews()" data-i18n="Try Again">Try Again</button>
+          </div>
+          <div id="health-news-grid" class="health-news-grid">
+            <!-- Dynamically populated from /api/health-news -->
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer>
+      <p>&copy; 2026 SmartCare Health Portal. All rights reserved.</p>
+      <p>Secure HIPAA-Compliant Appointment System</p>
+    </footer>
+
+    <!-- ==========================================
+       SMARTCARE MULTILINGUAL AI HEALTH ASSISTANT (GOOGLE GEMINI)
+       ========================================== -->
+    <div id="ai-assistant-widget">
+      <!-- Floating Action Button -->
+      <button id="ai-toggle-btn" class="ai-fab-btn" onclick="toggleAiChat()" aria-label="Open AI Health Assistant">
+        <div class="ai-fab-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+            <path d="M4 11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-7z"></path>
+            <circle cx="9" cy="15" r="1.5" fill="currentColor"></circle>
+            <circle cx="15" cy="15" r="1.5" fill="currentColor"></circle>
+            <path d="M9 19h6"></path>
+          </svg>
+        </div>
+        <span class="ai-fab-label">AI Health Assistant</span>
+        <span class="ai-pulse-dot"></span>
+      </button>
+
+      <!-- AI Chat Window -->
+      <div id="ai-chat-window" class="ai-chat-window closed">
+        <!-- Chat Header -->
+        <div class="ai-chat-header">
+          <div class="ai-header-info">
+            <div class="ai-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+                <path d="M4 11a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-7z"></path>
+                <circle cx="9" cy="15" r="1.5" fill="currentColor"></circle>
+                <circle cx="15" cy="15" r="1.5" fill="currentColor"></circle>
+              </svg>
+            </div>
+            <div>
+              <h4>SmartCare AI Assistant</h4>
+              <div class="ai-status">
+                <span class="ai-status-indicator" id="ai-indicator-dot"></span>
+                <span id="ai-header-status-text">Ready</span>
+              </div>
+            </div>
+          </div>
+          <div class="ai-header-actions">
+            <!-- Speech Recognition Spoken Language Selector -->
+            <select id="ai-speech-lang" class="ai-lang-select" onchange="onSpeechLangChange()" title="Choose spoken/preferred language">
+              <option value="en-IN" selected>English</option>
+              <option value="te-IN">తెలుగు</option>
+              <option value="hi-IN">हिन्दी</option>
+              <option value="ta-IN">தமிழ்</option>
+              <option value="kn-IN">ಕನ್ನಡ</option>
+              <option value="ml-IN">മലയാളം</option>
+              <option value="bn-IN">বাংলা</option>
+            </select>
+            <!-- Auto Read-Aloud / Speaker Toggle -->
+            <button type="button" id="ai-tts-toggle-btn" class="ai-icon-btn active" onclick="toggleAutoSpeech()" title="Voice Output: ON" aria-label="Toggle voice output">
+              <svg id="ai-tts-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+            </button>
+            <button type="button" class="ai-icon-btn" onclick="toggleAiChat()" title="Close chat" aria-label="Close chat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Voice Listening Banner -->
+        <div id="ai-voice-status" class="ai-voice-status hidden">
+          <div class="ai-voice-wave-bars">
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <span id="ai-voice-status-text">🎙️ Listening... Speak naturally</span>
+          <button type="button" class="ai-voice-stop-btn" onclick="stopVoiceRecognition()">Done</button>
+        </div>
+
+        <!-- Voice Speaking Banner -->
+        <div id="ai-speaking-status" class="ai-speaking-status hidden">
+          <div class="ai-speaking-icon">🔊</div>
+          <span>Reading response aloud...</span>
+          <button type="button" class="ai-voice-stop-btn" onclick="stopAllSpeech()">Stop</button>
+        </div>
+
+        <!-- Messages Stream -->
+        <div id="ai-messages" class="ai-messages-container">
+          <!-- Default Welcome Message -->
+          <div class="ai-msg bot">
+            <div class="ai-msg-avatar">🤖</div>
+            <div class="ai-msg-body">
+              <p>Hello! I am your <strong>SmartCare AI Health Assistant</strong>. 👋</p>
+              <p>Search or describe your symptoms in any language. I will analyze your condition and <strong>specify the exact specialist doctor</strong> from our hospital for you.</p>
+              <div class="ai-quick-prompts">
+                <button type="button" class="ai-chip" onclick="sendQuickPrompt('I have blurry vision and severe eye pain')">👁️ Eye pain & blurry vision (Dr. Srujan)</button>
+                <button type="button" class="ai-chip" onclick="sendQuickPrompt('I have high fever, chills, cold and dengue symptoms')">🌡️ High fever & dengue (Dr. Bharadwaj)</button>
+                <button type="button" class="ai-chip" onclick="sendQuickPrompt('I feel chest tightness, palpitations and high BP')">❤️ Chest pain & high BP (Dr. Nagi Reddy)</button>
+                <button type="button" class="ai-chip" onclick="sendQuickPrompt('Severe migraine headache and dizziness')">🧠 Migraine & headache (Dr. Nishank)</button>
+                <button type="button" class="ai-chip" onclick="sendQuickPrompt('Sharp toothache and swollen bleeding gums')">🦷 Toothache & bleeding gums (Dr. Sushma)</button>
+                <button type="button" class="ai-chip" onclick="sendQuickPrompt('Severe knee joint pain and difficulty walking')">🦴 Knee & joint pain (Dr. Rishikesh)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Area -->
+        <form id="ai-chat-form" class="ai-chat-input-bar" onsubmit="handleAiSubmit(event)">
+          <input type="text" id="ai-chat-input" placeholder="Type your health consultation question..." autocomplete="off" required>
+          <button type="submit" id="ai-send-btn" class="ai-send-btn" title="Send message" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </button>
+        </form>
+
+        <div class="ai-chat-disclaimer">
+          <span>⚠️ Medical information only. In severe emergencies, seek emergency hospital care immediately.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST ALERTS WRAPPER -->
+    <div id="toast-container"></div>
+
+    <!-- ==========================================
+       PDF GENERATION & SCRIPTS
+       ========================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="/app.js"></script>
+</body>
+
+</html>

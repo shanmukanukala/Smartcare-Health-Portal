@@ -1,14 +1,9 @@
 {
   "version": 2,
-  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "https://smartcare-health-portal.onrender.com/api/$1"
-    },
-    {
-      "source": "/",
-      "destination": "/smart_healthcare.html"
     }
   ]
 }
