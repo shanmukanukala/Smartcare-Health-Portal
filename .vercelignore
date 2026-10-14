@@ -1,7 +1,5 @@
 server.js
 models/
-package.json
-package-lock.json
 test_ai_assistant.js
 test_features.js
 .env
