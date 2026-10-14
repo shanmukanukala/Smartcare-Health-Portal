@@ -1,0 +1,15 @@
+{
+  "name": "smart-healthcare-portal",
+  "version": "1.0.0",
+  "description": "Smart Healthcare Portal with MongoDB Integration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^18.0.6",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  }
+}
